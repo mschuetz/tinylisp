@@ -48,14 +48,8 @@ void print(struct object * o){
 void print_cons(struct cons_cell * cc){
   printf("(");
   print(car(cc));
-
-  if (atom_p(cdr(cc))) {
-    printf(" . ");
-    print(cdr(cc));
-  } else {
-    
-  }
-
+  printf(" . ");
+  print(cdr(cc));
   printf(")");
 }
 
@@ -63,9 +57,4 @@ void print_atom(atom a){
   printf("%s", st_id_to_name(a));
 }
 
-struct obj * reader(){
-  char *s;
-  while(s = (char *)yylex()){}
-    
-}
 

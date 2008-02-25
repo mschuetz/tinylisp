@@ -2,6 +2,7 @@
 #define __TINYLISP_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef int atom;
 
@@ -22,5 +23,6 @@ struct object * cdr(struct cons_cell * cc);
 struct object * quote(char * s);
 struct object * cons(struct object * o1, struct object * o2);
 void print(struct object * o);
+struct object * reader();
 
 #endif

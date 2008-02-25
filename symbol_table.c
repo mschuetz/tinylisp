@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdio.h>
 #include "symbol_table.h"
 
 static struct symbol_table st;
@@ -32,5 +33,4 @@ struct object * st_lookup(char * name){
 char * st_id_to_name(atom id){
   return st.symbols[id].name;
 }
-
 
