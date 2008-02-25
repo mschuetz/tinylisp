@@ -63,8 +63,9 @@ void print_atom(atom a){
   printf("%s", st_id_to_name(a));
 }
 
-struct obj * read(){
+struct obj * reader(){
   char *s;
-  while(s = (char *)yylex())
+  while(s = (char *)yylex()){}
+    
 }
 
