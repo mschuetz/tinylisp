@@ -4,7 +4,8 @@
 #include "parser.h"
 
 int main(int argc, char **argv){
-  print(parse()); puts("");
+  print(parse());puts("");
+  
   return 0;
 }
 

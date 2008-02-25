@@ -1,7 +1,9 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 #include "base.h"
 #include "symbol_table.h"
+
 
 /*
 lisp_program -> atom|list
@@ -51,7 +53,10 @@ static struct object * parse_list() {
 
 static struct object * parse_atom() {
   static struct object * o;
-  o = st_insert(sym);
+  if (strcmp(sym, "nil")==0)
+    o = nil;
+  else
+    o = st_insert(sym);
   sym = yylex();
   return o;
 }
@@ -76,3 +81,18 @@ struct object * parse(){
   return lisp_program();
 }
 
+extern FILE * yyin;
+
+struct object * parse_string(char *s){
+  struct object *o;
+  char * fn = "/tmp/tinylisp-123";
+  FILE * f = fopen(fn, "w");
+  fwrite(s, strlen(s), 1, f);
+  fclose(f);
+  FILE * tmp = yyin;
+  yyin = fopen(fn, "r");
+  o = parse();
+  fclose(yyin);
+  yyin = tmp;
+  return o;
+}
