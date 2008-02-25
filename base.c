@@ -26,12 +26,18 @@ struct object * cdr(struct object * o){
   exit(1);
 }
 
-bool atom_p(struct object * o){
-  return o!=nil && o->atom_p;
+struct object * atom_p(struct object * o){
+  if (o!=nil && o->atom_p)
+    return sym("t");
+  else
+    return nil;
 }
 
-bool eq(struct object * o1, struct object * o2){
-  return (atom_p(o1) && atom_p(o2) && o1==o2) || (o1==o2 && o2==nil);
+struct object * eq(struct object * o1, struct object * o2){
+  if ((atom_p(o1) && atom_p(o2) && o1==o2) || (o1==o2 && o2==nil))
+    return sym("t");
+  else
+    return nil;
 }
 
 struct object * cond(int len, ...) {
@@ -128,7 +134,48 @@ void print_atom(atom a){
   printf("%s", st_id_to_name(a));
 }
 
+struct object * null(struct object * o){
+  return eq(o, nil);
+}
+
+struct object * and(struct object * x, struct object * y){
+  if (!null(x) && !null(y))
+    return sym("t");
+  else
+    return nil;
+}
+
+struct object * not(struct object * o){
+  if (o == nil)
+    return sym("t");
+  else
+    return nil;
+}
+
+
 struct object * sym(char * name){
   return st_insert(name);
 }
 
+struct object * cadr(struct object * o){
+  return car(cdr(o));
+}
+
+struct object * caddr(struct object * o){
+  return car(cdr(cdr(o)));
+}
+
+struct object * caar(struct object * o){
+  return car(car(o));
+}
+
+struct object * caddar(struct object * o){
+  return car(cdr(cdr(car(o))));
+}
+
+struct object * append(struct object * x, struct object * y){
+  if (null(x))
+    return y;
+  
+  return cons(car(x), append(cdr(x), y));
+}
