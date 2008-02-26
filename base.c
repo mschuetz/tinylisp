@@ -11,7 +11,7 @@ struct object * car(struct object * o){
     else
       return nil;
   }
-  fprintf(stderr, "not a list\n");
+  fprintf(stderr, "not a list (in car)\n");
   exit(1);
 }
 
@@ -22,7 +22,7 @@ struct object * cdr(struct object * o){
     else
       return nil;
   }
-  fprintf(stderr, "not a list\n");
+  fprintf(stderr, "not a list (in cdr)\n");
   exit(1);
 }
 
@@ -243,7 +243,7 @@ struct object * eval(struct object * e, struct object *a){
   }
   
   if (eq(caar(e), sym("label")))
-    return eval(cons(caddar(e), cdr(e)), cons(list(cadar(e), car(e)), a));
+    return eval(cons(caddar(e), cdr(e)), cons(list(2, cadar(e), car(e)), a));
 
   if (eq(caar(e), sym("lambda")))
     return eval(caddar(e), append(pair(cadar(e), evlis(cdr(e), a)), a));

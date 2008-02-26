@@ -11,14 +11,14 @@ list -> "(" list_body ")"
 list_body -> (atom|list)+
  */
 
-static char *sym;
+static char *_sym;
 
 static bool is_o(){
-  return sym[0]=='(';
+  return _sym[0]=='(';
 }
 
 static bool is_c(){
-  return sym[0]==')';
+  return _sym[0]==')';
 }
 
 static bool is_sym(){
@@ -26,8 +26,8 @@ static bool is_sym(){
 }
 
 static void match(char * s){
-  if (strcmp(s, sym)==0) {
-    sym = yylex();
+  if (strcmp(s, _sym)==0) {
+    _sym = (char *)yylex();
   }
   else {
     fprintf(stderr, "parse error\n");
@@ -53,11 +53,11 @@ static struct object * parse_list() {
 
 static struct object * parse_atom() {
   static struct object * o;
-  if (strcmp(sym, "nil")==0)
+  if (strcmp(_sym, "nil")==0)
     o = nil;
   else
-    o = st_insert(sym);
-  sym = yylex();
+    o = st_insert(_sym);
+  _sym = (char *)yylex();
   return o;
 }
 
@@ -77,7 +77,7 @@ static struct object * lisp_program(){
 }
 
 struct object * parse(){
-  sym = (char *)yylex();
+  _sym = (char *)yylex();
   return lisp_program();
 }
 

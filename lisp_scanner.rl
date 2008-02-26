@@ -9,11 +9,11 @@ name2   [A-Za-z_0-9]
 
 %%
 
-{name1}{name2}*         { return (char *)yytext; }
+{name1}{name2}*         { return (int)yytext; }
 
 
-"(" {return (char *)yytext;}
-")" {return (char *)yytext;}
+"(" {return (int)yytext;}
+")" {return (int)yytext;}
 
 "\n"                    { }
 			
