@@ -36,8 +36,10 @@ struct object * not(struct object * o);
 
 struct object * cadr(struct object * o);
 struct object * caddr(struct object * o);
+struct object * cadar(struct object * o);
 struct object * caar(struct object * o);
 struct object * caddar(struct object * o);
 struct object * append(struct object * x, struct object * y);
 struct object * pair(struct object * x, struct object * y);
+struct object * assoc(struct object * x, struct object * y);
 #endif

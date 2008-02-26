@@ -173,6 +173,10 @@ struct object * caddar(struct object * o){
   return car(cdr(cdr(car(o))));
 }
 
+struct object * cadar(struct object * o){
+  return car(cdr(car(o)));
+}
+
 struct object * append(struct object * x, struct object * y){
   if (null(x))
     return y;
@@ -188,4 +192,22 @@ struct object * pair(struct object * x, struct object * y) {
   if (!atom_p(x) && !atom_p(y))
     return cons(list(2, car(x), car(y)), pair(cdr(x), cdr(y)));
 }
+
+struct object * assoc(struct object * x, struct object * y) {
+  if (null(x)) {
+    fprintf(stderr, "nil is not a variablename\n");
+    exit(1);
+  }
+  
+  if (null(y)) {
+    fprintf(stderr, "no variable %s defined\n", st_id_to_name((atom)x->data));
+    exit(1);
+  }
+  if (eq(caar(y), x))
+    return cadar(y);
+
+  assoc(x, cdr(y));
+}
+
+
 
