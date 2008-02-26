@@ -219,7 +219,7 @@ struct object * eval(struct object * e, struct object *a){
     return assoc(e, a);
   if (atom_p(car(e))) {
     if (eq(car(e), sym("eval")))
-      return eval(eval(cadr(e), a), append(a, eval(caddr(e), a)));
+      return eval(eval(cadr(e), a), append(eval(caddr(e), a), a));
 
     if (eq(car(e), sym("quote")))
       return cadr(e);
@@ -241,6 +241,9 @@ struct object * eval(struct object * e, struct object *a){
 
     if (eq(car(e), sym("cond")))
       return evcon(cdr(e),a);
+    
+    if (eq(car(e), sym("append")))
+      return append(eval(cadr(e), a), eval(caddr(e), a));
     
     return eval(cons(assoc(car(e), a), cdr(e)), a);
   }
