@@ -179,3 +179,13 @@ struct object * append(struct object * x, struct object * y){
   
   return cons(car(x), append(cdr(x), y));
 }
+
+
+struct object * pair(struct object * x, struct object * y) {
+  if (null(x) && null(y))
+    return nil;
+  
+  if (!atom_p(x) && !atom_p(y))
+    return cons(list(2, car(x), car(y)), pair(cdr(x), cdr(y)));
+}
+

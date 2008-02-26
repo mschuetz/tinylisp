@@ -39,4 +39,5 @@ struct object * caddr(struct object * o);
 struct object * caar(struct object * o);
 struct object * caddar(struct object * o);
 struct object * append(struct object * x, struct object * y);
+struct object * pair(struct object * x, struct object * y);
 #endif
