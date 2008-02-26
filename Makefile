@@ -7,7 +7,7 @@ flex:
 	$(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) -c $<
 
 tinylisp: flex tinylisp.o symbol_table.o base.o lex.yy.o parser.o
-	$(CC) -g -o tinylisp tinylisp.o symbol_table.o base.o lex.yy.o parser.o $(LIBFL)
+	$(CC) -g -lreadline -o tinylisp tinylisp.o symbol_table.o base.o lex.yy.o parser.o $(LIBFL)
 
 
 run: tinylisp

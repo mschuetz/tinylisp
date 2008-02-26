@@ -42,4 +42,5 @@ struct object * caddar(struct object * o);
 struct object * append(struct object * x, struct object * y);
 struct object * pair(struct object * x, struct object * y);
 struct object * assoc(struct object * x, struct object * y);
+struct object * eval(struct object * e, struct object * a);
 #endif

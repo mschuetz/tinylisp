@@ -206,7 +206,61 @@ struct object * assoc(struct object * x, struct object * y) {
   if (eq(caar(y), x))
     return cadar(y);
 
-  assoc(x, cdr(y));
+  return assoc(x, cdr(y));
+}
+struct object * evcon(struct object * c, struct object *a);
+struct object * evlis(struct object * m, struct object *a);
+
+struct object * eval(struct object * e, struct object *a){
+  if (atom_p(e))
+    return assoc(e, a);
+  if (atom_p(car(e))) {
+    if (eq(car(e), sym("eval")))
+      return eval(eval(cadr(e), a), append(a, eval(caddr(e), a)));
+
+    if (eq(car(e), sym("quote")))
+      return cadr(e);
+
+    if (eq(car(e), sym("atom")))
+      return atom_p(eval(cadr(e), a));
+
+    if (eq(car(e), sym("eq")))
+      return eq(eval(cadr(e), a), eval(caddr(e), a));
+
+    if (eq(car(e), sym("car")))
+      return car(eval(cadr(e), a));
+
+    if (eq(car(e), sym("cdr")))
+      return cdr(eval(cadr(e), a));
+    
+    if (eq(car(e), sym("cons")))
+      return cons(eval(cadr(e), a), eval(caddr(e), a));
+
+    if (eq(car(e), sym("cond")))
+      return evcon(cdr(e),a);
+    
+    return eval(cons(assoc(car(e), a), cdr(e)), a);
+  }
+  
+  if (eq(caar(e), sym("label")))
+    return eval(cons(caddar(e), cdr(e)), cons(list(cadar(e), car(e)), a));
+
+  if (eq(caar(e), sym("lambda")))
+    return eval(caddar(e), append(pair(cadar(e), evlis(cdr(e), a)), a));
+}
+
+struct object * evcon(struct object * c, struct object *a){
+  if (eval(caar(c), a))
+    return eval(cadar(c), a);
+  
+  return evcon(cdr(c), a);
+}
+
+struct object * evlis(struct object * m, struct object *a){
+  if (null(m))
+    return nil;
+  
+  return cons(eval(car(m), a), evlis(cdr(m), a));
 }
 
 
