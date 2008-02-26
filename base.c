@@ -12,6 +12,7 @@ struct object * car(struct object * o){
       return nil;
   }
   fprintf(stderr, "not a list (in car)\n");
+  print(o);
   exit(1);
 }
 
@@ -116,9 +117,9 @@ void print(struct object * o){
 
 void print_cons(struct object * o){
   /*  printf("(");
-  print(car(cc));
+  print(car(o));
   printf(" . ");
-  print(cdr(cc));
+  print(cdr(o));
   printf(")");*/
 
   printf("(");
@@ -212,6 +213,8 @@ struct object * evcon(struct object * c, struct object *a);
 struct object * evlis(struct object * m, struct object *a);
 
 struct object * eval(struct object * e, struct object *a){
+  if (null(e))
+    return nil;
   if (atom_p(e))
     return assoc(e, a);
   if (atom_p(car(e))) {
@@ -247,6 +250,9 @@ struct object * eval(struct object * e, struct object *a){
 
   if (eq(caar(e), sym("lambda")))
     return eval(caddar(e), append(pair(cadar(e), evlis(cdr(e), a)), a));
+
+  fprintf(stderr, "reached end of eval. probably a syntax error");
+  exit(1);
 }
 
 struct object * evcon(struct object * c, struct object *a){
