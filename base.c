@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <readline/readline.h>
 #include "base.h"
 #include "symbol_table.h"
 
@@ -103,7 +104,7 @@ struct object * lambda(struct object * o){
 void print_cons(struct object * o);
 void print_atom(atom a);
 
-void print(struct object * o){
+struct object * print(struct object * o){
   if (o==nil) {
     printf("nil");
     return;
@@ -113,6 +114,8 @@ void print(struct object * o){
     print_atom((atom) o->data);
   else
     print_cons(o);
+
+  return nil;
 }
 
 void print_cons(struct object * o){
@@ -166,6 +169,10 @@ struct object * caddr(struct object * o){
   return car(cdr(cdr(o)));
 }
 
+struct object * cadddr(struct object * o){
+  return car(cdr(cdr(cdr(o))));
+}
+
 struct object * caar(struct object * o){
   return car(car(o));
 }
@@ -212,6 +219,8 @@ struct object * assoc(struct object * x, struct object * y) {
 struct object * evcon(struct object * c, struct object *a);
 struct object * evlis(struct object * m, struct object *a);
 
+extern struct object * globals_end;
+
 struct object * eval(struct object * e, struct object *a){
   if (null(e))
     return nil;
@@ -241,7 +250,27 @@ struct object * eval(struct object * e, struct object *a){
 
     if (eq(car(e), sym("cond")))
       return evcon(cdr(e),a);
-    
+
+    if (eq(car(e), sym("print"))) {
+      print(eval(cadr(e),a));
+      puts("");
+      return nil;
+    }
+
+    if (eq(car(e), sym("defun"))) {
+	struct object *name = cadr(e);
+	struct object *params = caddr(e);
+	struct object *body = cadddr(e);
+	struct object *pair = cons(list(2, name, list(3, sym("lambda"), params, body)), nil);
+	((struct cons_cell *)globals_end->data)->cdr = pair;
+	globals_end = pair;
+	return eval(name, a);
+    }
+
+    /*    if (eq(car(e), sym("list"))) {
+      
+	  }*/
+
     if (eq(car(e), sym("append")))
       return append(eval(cadr(e), a), eval(caddr(e), a));
     

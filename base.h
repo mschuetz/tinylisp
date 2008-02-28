@@ -25,7 +25,7 @@ struct object * quote(struct object * o);
 struct object * atom_p(struct object * o);
 struct object * eq(struct object * o1, struct object * o2);
 struct object * cons(struct object * o1, struct object * o2);
-void print(struct object * o);
+struct object * print(struct object * o);
 struct object * reader();
 struct object * sym(char * name);
 struct object * list(int len, ...);
