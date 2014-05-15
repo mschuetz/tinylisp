@@ -13,7 +13,7 @@ int main(int argc, char **argv){
 
   globals = cons(list(2, sym("t"), sym("t")), nil);
   globals_end = globals;
-  while (s = readline("tinylisp> ")) {
+  while ((s = readline("tinylisp> "))) {
     print(eval(parse_string(s), globals));
     puts("");
     free(s);

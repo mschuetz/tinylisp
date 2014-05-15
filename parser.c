@@ -4,20 +4,44 @@
 #include "base.h"
 #include "symbol_table.h"
 
-
 /*
 lisp_program -> atom|list
 list -> "(" list_body ")"
 list_body -> (atom|list)+
+
+or expressed in a simpler fashion:
+expr -> atom|list
+list -> "(" expr+ ")"
  */
+
+extern char *yytext;
+extern int yylex();
+
+static const char PARSE_ERROR[] = "parse error\n";
+
+static void check_not_nil(const void * p, const char * error_msg) {
+	if (p == nil) {
+		fputs(error_msg, stderr);
+		exit(EXIT_FAILURE);
+	}
+}
+
+const char * lex(){
+	if (yylex() == 0) {
+		return nil;
+	}
+	return strdup(yytext);
+}
 
 static char *_sym;
 
 static bool is_o(){
+  check_not_nil(_sym, PARSE_ERROR);
   return _sym[0]=='(';
 }
 
 static bool is_c(){
+  check_not_nil(_sym, PARSE_ERROR);
   return _sym[0]==')';
 }
 
@@ -27,11 +51,11 @@ static bool is_sym(){
 
 static void match(char * s){
   if (strcmp(s, _sym)==0) {
-    _sym = (char *)yylex();
+    _sym = (char *)lex();
   }
   else {
-    fprintf(stderr, "parse error\n");
-    exit(1);
+    fprintf(stderr, PARSE_ERROR);
+    exit(EXIT_FAILURE);
   }
 }
 
@@ -53,11 +77,12 @@ static struct object * parse_list() {
 
 static struct object * parse_atom() {
   static struct object * o;
+  check_not_nil(_sym, PARSE_ERROR);
   if (strcmp(_sym, "nil")==0)
     o = nil;
   else
     o = st_insert(_sym);
-  _sym = (char *)yylex();
+  _sym = (char *)lex();
   return o;
 }
 
@@ -77,7 +102,7 @@ static struct object * lisp_program(){
 }
 
 struct object * parse(){
-  _sym = (char *)yylex();
+  _sym = (char *)lex();
   return lisp_program();
 }
 

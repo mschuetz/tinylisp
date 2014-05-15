@@ -8,7 +8,7 @@
 struct object * car(struct object * o){
   if (!atom_p(o)) {
     if (o!=nil)
-      return ((struct cons_cell *)o->data)->car;
+      return o->data->car;
     else
       return nil;
   }
@@ -20,7 +20,7 @@ struct object * car(struct object * o){
 struct object * cdr(struct object * o){
   if (!atom_p(o)) {
     if (o!=nil)
-      return ((struct cons_cell *)o->data)->cdr;
+      return o->data->cdr;
     else
       return nil;
   }
@@ -71,11 +71,11 @@ struct object * list(int len, ...) {
   va_start(ap, len);
   for (i=0;i<len;i++){
     o = va_arg(ap, struct object *);
-    ((struct cons_cell *)cur->data)->car = o;
+    cur->data->car = o;
     if (i==len-1)
-      ((struct cons_cell *)cur->data)->cdr = nil;
+      cur->data->cdr = nil;
     else
-      ((struct cons_cell *)cur->data)->cdr = cons(nil, nil);
+      cur->data->cdr = cons(nil, nil);
     cur = cdr(cur);
   }
   va_end(ap);
@@ -98,7 +98,7 @@ struct object * quote(struct object * o){
 }
 
 struct object * lambda(struct object * o){
-  
+  return nil;
 }
 
 void print_cons(struct object * o);
@@ -107,11 +107,11 @@ void print_atom(atom a);
 struct object * print(struct object * o){
   if (o==nil) {
     printf("nil");
-    return;
+    return nil;
   }
 
   if (o->atom_p)
-    print_atom((atom) o->data);
+    print_atom(o->symbol_index);
   else
     print_cons(o);
 
@@ -130,7 +130,7 @@ void print_cons(struct object * o){
     print(car(o));
     if (cdr(o)!=nil)
       printf(" ");
-  } while (o = cdr(o));
+  } while ((o = cdr(o)));
   printf(")");
 }
 
@@ -199,16 +199,19 @@ struct object * pair(struct object * x, struct object * y) {
   
   if (!atom_p(x) && !atom_p(y))
     return cons(list(2, car(x), car(y)), pair(cdr(x), cdr(y)));
+
+  fprintf(stderr, "illegal state");
+  exit(1);
 }
 
 struct object * assoc(struct object * x, struct object * y) {
   if (null(x)) {
     fprintf(stderr, "nil is not a variablename\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   
   if (null(y)) {
-    fprintf(stderr, "no variable %s defined\n", st_id_to_name((atom)x->data));
+    fprintf(stderr, "no variable %s defined\n", st_id_to_name(x->symbol_index));
     exit(1);
   }
   if (eq(caar(y), x))
@@ -262,7 +265,7 @@ struct object * eval(struct object * e, struct object *a){
 	struct object *params = caddr(e);
 	struct object *body = cadddr(e);
 	struct object *pair = cons(list(2, name, list(3, sym("lambda"), params, body)), nil);
-	((struct cons_cell *)globals_end->data)->cdr = pair;
+	globals_end->data->cdr = pair;
 	globals_end = pair;
 	return eval(name, a);
     }
@@ -300,6 +303,4 @@ struct object * evlis(struct object * m, struct object *a){
   
   return cons(eval(car(m), a), evlis(cdr(m), a));
 }
-
-
 

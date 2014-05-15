@@ -11,7 +11,8 @@ typedef int atom;
 struct object {
   bool atom_p;
   bool function_p;
-  void * data; // either (atom *) or (struct cons_cell *)
+  struct cons_cell * data;
+  int symbol_index;
 };
 
 struct cons_cell {

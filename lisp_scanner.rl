@@ -1,5 +1,7 @@
 %{
 
+#include "parser.h"
+
 %}
 
 digit   [0-9]
@@ -9,11 +11,11 @@ name2   [A-Za-z_0-9]
 
 %%
 
-{name1}{name2}*         { return (int)yytext; }
+{name1}{name2}*         { return SYMBOL; }
 
 
-"(" {return (int)yytext;}
-")" {return (int)yytext;}
+"(" {return OPENING_BRACE;}
+")" {return CLOSING_BRACE;}
 
 "\n"                    { }
 			
