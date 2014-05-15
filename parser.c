@@ -20,17 +20,17 @@ extern int yylex();
 static const char PARSE_ERROR[] = "parse error\n";
 
 static void check_not_nil(const void * p, const char * error_msg) {
-	if (p == nil) {
-		fputs(error_msg, stderr);
-		exit(EXIT_FAILURE);
-	}
+  if (p == nil) {
+    fputs(error_msg, stderr);
+    exit(EXIT_FAILURE);
+  }
 }
 
 const char * lex(){
-	if (yylex() == 0) {
-		return nil;
-	}
-	return strdup(yytext);
+  if (yylex() == 0) {
+    return nil;
+  }
+  return strdup(yytext);
 }
 
 static char *_sym;
