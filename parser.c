@@ -17,15 +17,6 @@ list -> "(" expr+ ")"
 extern char *yytext;
 extern int yylex();
 
-static const char PARSE_ERROR[] = "parse error\n";
-
-static void check_not_nil(const void * p, const char * error_msg) {
-  if (p == nil) {
-    fputs(error_msg, stderr);
-    exit(EXIT_FAILURE);
-  }
-}
-
 const char * lex(){
   if (yylex() == 0) {
     return nil;
@@ -36,12 +27,12 @@ const char * lex(){
 static char *_sym;
 
 static bool is_o(){
-  check_not_nil(_sym, PARSE_ERROR);
+  check_not_nil(_sym, "parse error");
   return _sym[0]=='(';
 }
 
 static bool is_c(){
-  check_not_nil(_sym, PARSE_ERROR);
+  check_not_nil(_sym, "parse error %p", _sym);
   return _sym[0]==')';
 }
 
@@ -54,7 +45,7 @@ static void match(char * s){
     _sym = (char *)lex();
   }
   else {
-    fprintf(stderr, PARSE_ERROR);
+    fprintf(stderr, "parse error");
     exit(EXIT_FAILURE);
   }
 }
@@ -77,7 +68,7 @@ static struct object * parse_list() {
 
 static struct object * parse_atom() {
   static struct object * o;
-  check_not_nil(_sym, PARSE_ERROR);
+  check_not_nil(_sym, "parse error");
   if (strcmp(_sym, "nil")==0)
     o = nil;
   else

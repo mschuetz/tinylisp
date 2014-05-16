@@ -12,9 +12,7 @@ struct object * car(struct object * o){
     else
       return nil;
   }
-  fprintf(stderr, "not a list (in car)\n");
-  print(o);
-  exit(1);
+  check(false, "argument not a list");
 }
 
 struct object * cdr(struct object * o){
@@ -24,8 +22,7 @@ struct object * cdr(struct object * o){
     else
       return nil;
   }
-  fprintf(stderr, "not a list (in cdr)\n");
-  exit(1);
+  check(false, "argument not a list");
 }
 
 struct object * atom_p(struct object * o){
@@ -303,4 +300,3 @@ struct object * evlis(struct object * m, struct object *a){
   
   return cons(eval(car(m), a), evlis(cdr(m), a));
 }
-

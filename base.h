@@ -44,4 +44,14 @@ struct object * append(struct object * x, struct object * y);
 struct object * pair(struct object * x, struct object * y);
 struct object * assoc(struct object * x, struct object * y);
 struct object * eval(struct object * e, struct object * a);
+
+#define check(cond, error_fmt, ...) {\
+  if (!(cond)) {\
+    fprintf(stderr, "%s: (%s) == false. " error_fmt "\n", __PRETTY_FUNCTION__, #cond, ##__VA_ARGS__);\
+    exit(EXIT_FAILURE);\
+  }\
+}
+
+#define check_not_nil(p, error_fmt, ...) (check(p!=nil, error_fmt, ##__VA_ARGS__))
+
 #endif

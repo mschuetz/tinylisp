@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "symbol_table.h"
+#include "base.h"
 
 static struct symbol_table st;
 
@@ -9,6 +10,7 @@ struct object * st_insert(char * name){
   if ((o = st_lookup(name)) != NULL)
     return o;
 
+  check(st.size < 2048, "symbol table size exceeded");
   struct symbol * sym = &st.symbols[st.size];
   o = &sym->object;
   o->atom_p = true;
