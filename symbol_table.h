@@ -7,8 +7,10 @@ struct symbol {
   char name[128];
 };
 
+#define SYMBOL_TABLE_SIZE 2048
+
 struct symbol_table {
-  struct symbol symbols[2048];
+  struct symbol symbols[SYMBOL_TABLE_SIZE];
   int size;
 };
 
