@@ -3,3 +3,5 @@
 /tinylisp
 /.project
 /.cproject
+test/test
+test_scanner
