@@ -219,7 +219,9 @@ struct object * assoc(struct object * x, struct object * y) {
 struct object * evcon(struct object * c, struct object *a);
 struct object * evlis(struct object * m, struct object *a);
 
-extern struct object * globals_end;
+
+struct object * globals = nil;
+struct object * globals_end = nil;
 
 struct object * eval(struct object * e, struct object *a){
   if (null(e))

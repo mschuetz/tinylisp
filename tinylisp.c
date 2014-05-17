@@ -4,8 +4,8 @@
 #include "symbol_table.h"
 #include "parser.h"
 
-struct object * globals = nil;
-struct object * globals_end = nil;
+extern struct object * globals;
+extern struct object * globals_end;
 
 int main(int argc, char **argv){
   char * s;

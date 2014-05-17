@@ -1,12 +1,18 @@
 LIBFL = /opt/local/lib/libfl.a
 
+CFLAGS+=-I/opt/local/include -Wall -Werror
+
 flex:
 	flex lisp_scanner.rl
 
 .c.o:
-	$(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $<
 
-tinylisp: flex tinylisp.o symbol_table.o base.o lex.yy.o parser.o
+# separate target because it would fail with -Werror
+lex.yy.o: flex
+	$(CC) -c lex.yy.c
+
+tinylisp: flex tinylisp.o symbol_table.o base.o lex.yy.o parser.o hashmap.o
 	$(CC) -g -lreadline -o tinylisp tinylisp.o symbol_table.o base.o lex.yy.o parser.o $(LIBFL)
 
 run: tinylisp
@@ -15,7 +21,8 @@ run: tinylisp
 clean: 
 	rm tinylisp *.o || true
 
-test: flex test_scanner.o lex.yy.o
-	gcc -o test_scanner test_scanner.o lex.yy.o $(LIBFL)
-
 all: tinylisp
+
+test: tinylisp test/hashmap_test.o
+	$(CC) -o test/test hashmap.o hashmap_test.o base.o symbol_table.o -lcheck -L/opt/local/lib 
+	./test/test
