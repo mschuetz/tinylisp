@@ -4,8 +4,8 @@
 #include "symbol_table.h"
 #include "parser.h"
 
-extern struct object * globals;
-extern struct object * globals_end;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 
 int main(int argc, char **argv){
   char * s;
@@ -21,4 +21,4 @@ int main(int argc, char **argv){
   return 0;
 }
 
-
+#pragma clang diagnostic pop

@@ -3,6 +3,7 @@
 #include <string.h>
 #include "base.h"
 #include "symbol_table.h"
+#include "parser.h"
 
 /*
 lisp_program -> atom|list
@@ -17,7 +18,7 @@ list -> "(" expr+ ")"
 extern char *yytext;
 extern int yylex();
 
-const char * lex(){
+static const char * lex(){
   if (yylex() == 0) {
     return nil;
   }
@@ -92,7 +93,7 @@ static struct object * lisp_program(){
   return atom_or_list();
 }
 
-struct object * parse(){
+static struct object * parse(){
   _sym = (char *)lex();
   return lisp_program();
 }

@@ -3,6 +3,6 @@
 
 enum symbol_types { SYMBOL, OPENING_BRACE, CLOSING_BRACE };
 
-struct object * parse();
 struct object * parse_string(char *s);
+
 #endif

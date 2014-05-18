@@ -17,7 +17,7 @@ struct object * st_insert(char * name){
   o->function_p = false;
   o->symbol_index = st.size;
 
-  int length = strlen(name);
+  size_t length = strlen(name);
   strncpy(sym->name, name, length);
 
   st.size++;
