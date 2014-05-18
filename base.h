@@ -21,6 +21,9 @@ struct cons_cell {
   struct object * cdr;
 };
 
+extern struct object * globals;
+extern struct object * globals_end;
+
 struct object * car(struct object * o);
 struct object * cdr(struct object * o);
 struct object * quote(struct object * o);
@@ -45,6 +48,12 @@ struct object * append(struct object * x, struct object * y);
 struct object * pair(struct object * x, struct object * y);
 struct object * assoc(struct object * x, struct object * y);
 struct object * eval(struct object * e, struct object * a);
+
+#ifdef DEBUG
+#define LOG(fmt, ...) fprintf(stderr, "%s: " fmt "\n", __PRETTY_FUNCTION__, ##__VA_ARGS__);
+#else
+#define LOG(fmt, ...)
+#endif
 
 #define check(cond, error_fmt, ...) {\
   if (!(cond)) {\

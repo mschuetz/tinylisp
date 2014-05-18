@@ -39,24 +39,6 @@ struct object * eq(struct object * o1, struct object * o2){
     return nil;
 }
 
-struct object * cond(int len, ...) {
-  va_list ap;
-  struct object * o;
-  struct object * val = nil;
-  int i;
-  
-  va_start(ap, len);
-  for (i=0;i<len;i++){
-    o = va_arg(ap, struct object *);
-    if (car(o)!=nil) {
-      val = cdr(o);
-      break;
-    }
-  }
-  va_end(ap);
-  return val;
-}
-
 struct object * list(int len, ...) {
   va_list ap;
   struct object * start = nil;
@@ -94,12 +76,8 @@ struct object * quote(struct object * o){
   return o;
 }
 
-struct object * lambda(struct object * o){
-  return nil;
-}
-
-void print_cons(struct object * o);
-void print_atom(atom a);
+static void print_cons(struct object * o);
+static void print_atom(atom a);
 
 struct object * print(struct object * o){
   if (o==nil) {
@@ -115,7 +93,7 @@ struct object * print(struct object * o){
   return nil;
 }
 
-void print_cons(struct object * o){
+static void print_cons(struct object * o){
   /*  printf("(");
   print(car(o));
   printf(" . ");
@@ -131,7 +109,7 @@ void print_cons(struct object * o){
   printf(")");
 }
 
-void print_atom(atom a){
+static void print_atom(atom a){
   printf("%s", st_id_to_name(a));
 }
 
@@ -166,7 +144,7 @@ struct object * caddr(struct object * o){
   return car(cdr(cdr(o)));
 }
 
-struct object * cadddr(struct object * o){
+static struct object * cadddr(struct object * o){
   return car(cdr(cdr(cdr(o))));
 }
 
@@ -216,9 +194,9 @@ struct object * assoc(struct object * x, struct object * y) {
 
   return assoc(x, cdr(y));
 }
-struct object * evcon(struct object * c, struct object *a);
-struct object * evlis(struct object * m, struct object *a);
 
+static struct object * evcon(struct object * c, struct object *a);
+static struct object * evlis(struct object * m, struct object *a);
 
 struct object * globals = nil;
 struct object * globals_end = nil;
@@ -251,22 +229,22 @@ struct object * eval(struct object * e, struct object *a){
       return cons(eval(cadr(e), a), eval(caddr(e), a));
 
     if (eq(car(e), sym("cond")))
-      return evcon(cdr(e),a);
+      return evcon(cdr(e), a);
 
     if (eq(car(e), sym("print"))) {
-      print(eval(cadr(e),a));
+      print(eval(cadr(e), a));
       puts("");
       return nil;
     }
 
     if (eq(car(e), sym("defun"))) {
-	struct object *name = cadr(e);
-	struct object *params = caddr(e);
-	struct object *body = cadddr(e);
-	struct object *pair = cons(list(2, name, list(3, sym("lambda"), params, body)), nil);
-	globals_end->data->cdr = pair;
-	globals_end = pair;
-	return eval(name, a);
+      struct object *name = cadr(e);
+      struct object *params = caddr(e);
+      struct object *body = cadddr(e);
+      struct object *pair = cons(list(2, name, list(3, sym("lambda"), params, body)), nil);
+      globals_end->data->cdr = pair;
+      globals_end = pair;
+      return eval(name, a);
     }
 
     /*    if (eq(car(e), sym("list"))) {

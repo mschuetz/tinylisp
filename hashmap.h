@@ -26,7 +26,7 @@ struct hashmap * hashmap_create_string_keys(const size_t initial_size,
     const double load_factor);
 
 // returns true on success
-bool hashmap_put(const struct hashmap * hm, void * key, void * value);
+bool hashmap_put(struct hashmap * hm, void * key, void * value);
 const void * hashmap_get(const struct hashmap * hm, const void * key);
 void hashmap_remove(const struct hashmap * hm, const void * key);
 

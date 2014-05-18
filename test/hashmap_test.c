@@ -1,12 +1,23 @@
 #include <check.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "../hashmap.h"
+#include "../base.h"
 
 static void fill(struct hashmap* map) {
   hashmap_put(map, "foo", "bar");
   hashmap_put(map, "baz", "quux");
 }
 
+/*
+static void dump(struct hashmap* map) {
+  for (size_t i = 0; i < map->size; i++) {
+    char * k = map->entries[i].key;
+    char * v = map->entries[i].value;
+    fprintf(stderr, "%zu %p -> %p %s -> %s\n", i, k, v, k == NULL ? "" : k, v == NULL ? "" : v);
+  }
+}
+*/
 START_TEST (test_create)
   {
     struct hashmap * map = hashmap_create_string_keys(32, 0.75);
@@ -19,6 +30,28 @@ START_TEST (test_insert_and_get)
     fill(map);
     ck_assert_str_eq(hashmap_get(map, "foo"), "bar");
     ck_assert_str_eq(hashmap_get(map, "baz"), "quux");
+  }END_TEST
+
+START_TEST (test_resize)
+  {
+    struct hashmap* map = hashmap_create_string_keys(8, 0.75);
+    for (int i=0; i<32; i++) {
+      char * key;
+      char * value;
+      asprintf(&key, "key%d", i);
+      asprintf(&value, "value%d", i);
+      hashmap_put(map, key, value);
+    }
+    //dump(map);
+    for (int i=0; i<32; i++) {
+      char * key;
+      char * value;
+      asprintf(&key, "key%d", i);
+      asprintf(&value, "value%d", i);
+      const char * actual = hashmap_get(map, key);
+      ck_assert_ptr_ne(actual, NULL);
+      ck_assert_str_eq(actual, value);
+    }
   }END_TEST
 
 START_TEST (test_remove)
@@ -35,8 +68,9 @@ int main() {
   Suite * s = suite_create("hashmap");
   TCase * tc_core = tcase_create("Core");
   tcase_add_test(tc_core, test_create);
-  tcase_add_test(tc_core, test_remove);
   tcase_add_test(tc_core, test_insert_and_get);
+  tcase_add_test(tc_core, test_remove);
+  tcase_add_test(tc_core, test_resize);
   suite_add_tcase(s, tc_core);
   SRunner * sr = srunner_create(s);
   srunner_run_all(sr, CK_NORMAL);
