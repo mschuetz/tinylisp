@@ -9,19 +9,22 @@ struct hashmap_entry {
   uint32_t hash;
 };
 
+#define HASHMAP_HASH(name) uint32_t (*name)(const void * key, const size_t size)
+#define HASHMAP_EQUALS(name) bool (*name)(const void * key1, const void * key2, const size_t size)
+
 struct hashmap {
   struct hashmap_entry *entries;
   double load_factor;
   size_t size;
   size_t load;
-  uint32_t (*hash)(const void * key, const size_t size);
-  bool (*equals)(const void * key1, const void * key2, const size_t size);
+  HASHMAP_HASH(hash);
+  HASHMAP_EQUALS(equals);
 };
 
 struct hashmap * hashmap_create(const size_t initial_size,
     const double load_factor,
-    uint32_t (*hash)(const void * key, const size_t size),
-    bool (*equals)(const void * key1, const void * key2, const size_t size));
+    HASHMAP_HASH(hash),
+    HASHMAP_EQUALS(equals));
 struct hashmap * hashmap_create_string_keys(const size_t initial_size,
     const double load_factor);
 
