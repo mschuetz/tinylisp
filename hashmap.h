@@ -27,7 +27,10 @@ struct hashmap * hashmap_create_string_keys(const size_t initial_size,
 
 // returns true on success
 bool hashmap_put(struct hashmap * hm, void * key, void * value);
-const void * hashmap_get(const struct hashmap * hm, const void * key);
-void hashmap_remove(const struct hashmap * hm, const void * key);
+struct hashmap_entry * hashmap_get_entry(const struct hashmap * hm, const void * key);
+void * hashmap_get(const struct hashmap * hm, const void * key);
+void *  hashmap_remove(const struct hashmap * hm, const void * key);
+
+void hashmap_free_all(const struct hashmap *hm);
 
 #endif /* HASHMAP_H_ */

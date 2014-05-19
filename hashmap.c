@@ -98,7 +98,7 @@ bool hashmap_put(struct hashmap * hm, void * key, void * value) {
   return put_with_hash_no_resize(hm, key, value, hash);
 }
 
-static struct hashmap_entry * hashmap_get_entry(const struct hashmap * hm, const void * key) {
+struct hashmap_entry * hashmap_get_entry(const struct hashmap * hm, const void * key) {
   uint32_t hash = hm->hash(key, 0);
   uint32_t start_index = hash % hm->size;
   for (uint32_t i=0; i < hm->size; i++) {
@@ -111,16 +111,29 @@ static struct hashmap_entry * hashmap_get_entry(const struct hashmap * hm, const
   return NULL;
 }
 
-const void * hashmap_get(const struct hashmap * hm, const void * key) {
+void * hashmap_get(const struct hashmap * hm, const void * key) {
   struct hashmap_entry * entry = hashmap_get_entry(hm, key);
   if (entry == NULL)
     return NULL;
   return entry->value;
 }
 
-void hashmap_remove(const struct hashmap * hm, const void * key) {
+void * hashmap_remove(const struct hashmap * hm, const void * key) {
   struct hashmap_entry * entry = hashmap_get_entry(hm, key);
   if (entry == NULL)
-    return;
+    return NULL;
+  void * value = entry->value;
   memset(entry, 0, sizeof(struct hashmap_entry));
+  return value;
+}
+
+void hashmap_free_all(const struct hashmap *hm) {
+  for (size_t i = 0; i < hm->size; i++) {
+    struct hashmap_entry * entry = &hm->entries[i];
+    if (entry->key == NULL)
+      continue;
+    free(entry->key);
+    free(entry->value);
+    memset(entry, 0, sizeof(struct hashmap_entry));
+  }
 }
