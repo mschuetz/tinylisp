@@ -8,9 +8,9 @@ static struct hashmap * allocate() {
 
 static uint32_t djb_hash_str(const void * data, const size_t size) {
   uint32_t hash = 5381;
-  char c;
   char * str = (char *) data;
   if (size == 0) {
+    char c;
     while ((c = *str++) != 0)
       hash = ((hash << 5) + hash) + ((uint32_t) c);
   } else {
