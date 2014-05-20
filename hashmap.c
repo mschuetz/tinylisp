@@ -28,8 +28,8 @@ static bool str_equals(const void * key1, const void * key2, const size_t size) 
 
 struct hashmap * hashmap_create(const size_t initial_size,
     const double load_factor,
-    HASHMAP_HASH(hash),
-    HASHMAP_EQUALS(equals)) {
+    hashmap_hash_fn hash,
+    hashmap_equals_fn equals) {
 
   struct hashmap * hm = allocate();
   if (hm == NULL)
