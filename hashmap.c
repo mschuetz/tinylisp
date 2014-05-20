@@ -37,12 +37,11 @@ struct hashmap * hashmap_create(const size_t initial_size,
   hm->size = initial_size;
   hm->hash = hash;
   hm->equals = equals;
-  hm->entries = malloc(initial_size * sizeof(struct hashmap_entry));
+  hm->entries = calloc(initial_size, sizeof(struct hashmap_entry));
   if (hm->entries == NULL) {
     free(hm);
     return NULL;
   }
-  memset(hm->entries, 0, initial_size * sizeof(struct hashmap_entry));
   hm->load = 0;
   hm->load_factor = load_factor;
   return hm;
@@ -72,14 +71,13 @@ static bool put_with_hash_no_resize(struct hashmap * hm, void * key, void * valu
 static bool hashmap_resize(struct hashmap * hm, size_t new_size) {
   LOG("resize %zu", new_size);
   struct hashmap_entry * old_entries = hm->entries;
-  struct hashmap_entry * new_entries = malloc(new_size * sizeof(struct hashmap_entry));
+  struct hashmap_entry * new_entries = calloc(new_size, sizeof(struct hashmap_entry));
   if (new_entries == NULL)
     return false;
   hm->entries = new_entries;
   hm->load = 0;
   const size_t old_size = hm->size;
   hm->size = new_size;
-  memset(hm->entries, 0, new_size * sizeof(struct hashmap_entry));
   for (size_t i = 0; i < old_size; i++) {
     if (old_entries[i].key == NULL)
       continue;
