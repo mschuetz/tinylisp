@@ -34,14 +34,14 @@ struct hashmap * hashmap_create(const size_t initial_size,
   struct hashmap * hm = allocate();
   if (hm == NULL)
     return NULL;
-  hm->size = initial_size;
-  hm->hash = hash;
-  hm->equals = equals;
   hm->entries = calloc(initial_size, sizeof(struct hashmap_entry));
   if (hm->entries == NULL) {
     free(hm);
     return NULL;
   }
+  hm->size = initial_size;
+  hm->hash = hash;
+  hm->equals = equals;
   hm->load = 0;
   hm->load_factor = load_factor;
   return hm;
