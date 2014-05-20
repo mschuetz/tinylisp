@@ -55,12 +55,15 @@ struct hashmap * hashmap_create_string_keys(size_t initial_size,
 static bool put_with_hash_no_resize(struct hashmap * hm, void * key, void * value, uint32_t hash) {
   LOG("%p -> %p hash=%d", key, value, hash);
   uint32_t start_index = hash % hm->size;
-  uint32_t index = start_index;
-  for (; index - start_index < hm->size; index++) {
-    if (hm->entries[index % hm->size].key == NULL)
+  struct hashmap_entry * entry = NULL;
+  for (uint32_t i = 0; i < hm->size; i++) {
+    entry = &hm->entries[(i + start_index) % hm->size];
+    if (entry->key == NULL)
       break;
   }
-  struct hashmap_entry * entry = &hm->entries[index % hm->size];
+  if (entry == NULL) {
+    return false;
+  }
   entry->hash = hash;
   entry->key = key;
   entry->value = value;
