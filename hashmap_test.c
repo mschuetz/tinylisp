@@ -1,8 +1,8 @@
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "../hashmap.h"
-#include "../base.h"
+#include "hashmap.h"
+#include "base.h"
 
 static void fill(hashmap* map) {
   hashmap_put(map, (void*)"foo", (void*)"bar");
