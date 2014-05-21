@@ -1,6 +1,7 @@
 #include "base.h"
 #include "hashmap.h"
 #include <string.h>
+#include <stdint.h>
 
 static hashmap * allocate() {
   return (hashmap *) malloc(sizeof(hashmap));

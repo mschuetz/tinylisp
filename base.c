@@ -132,7 +132,7 @@ struct object * not(struct object * o){
 }
 
 
-struct object * sym(char * name){
+struct object * sym(const char * name){
   return st_insert(name);
 }
 

@@ -4,9 +4,9 @@
 #include "../hashmap.h"
 #include "../base.h"
 
-static void fill(struct hashmap* map) {
-  hashmap_put(map, "foo", "bar");
-  hashmap_put(map, "baz", "quux");
+static void fill(hashmap* map) {
+  hashmap_put(map, (void*)"foo", (void*)"bar");
+  hashmap_put(map, (void*)"baz", (void*)"quux");
 }
 
 /*
@@ -20,14 +20,14 @@ static void dump(struct hashmap* map) {
 */
 START_TEST (test_create)
   {
-    struct hashmap * map = hashmap_create_string_keys(32, 0.75);
-    ck_assert_ptr_ne(map, NULL);
+    hashmap * map = hashmap_create_string_keys(32, 0.75);
+    ck_assert(NULL != map);
     free(map);
   }END_TEST
 
 START_TEST (test_insert_and_get)
   {
-    struct hashmap* map = hashmap_create_string_keys(2, 5.0);
+    hashmap* map = hashmap_create_string_keys(2, 5.0);
     fill(map);
     ck_assert_str_eq(hashmap_get(map, "foo"), "bar");
     ck_assert_str_eq(hashmap_get(map, "baz"), "quux");
@@ -36,7 +36,7 @@ START_TEST (test_insert_and_get)
 
 START_TEST (test_resize)
   {
-    struct hashmap* map = hashmap_create_string_keys(8, 0.75);
+    hashmap* map = hashmap_create_string_keys(8, 0.75);
     for (int i=0; i<32; i++) {
       char * key;
       char * value;
@@ -51,7 +51,7 @@ START_TEST (test_resize)
       asprintf(&key, "key%d", i);
       asprintf(&value, "value%d", i);
       char * actual = hashmap_get(map, key);
-      ck_assert_ptr_ne(actual, NULL);
+      ck_assert(NULL != actual);
       ck_assert_str_eq(actual, value);
       free(key);
       free(value);
@@ -62,12 +62,12 @@ START_TEST (test_resize)
 
 START_TEST (test_remove)
   {
-    struct hashmap* map = hashmap_create_string_keys(2, 5.0);
+    hashmap* map = hashmap_create_string_keys(2, 5.0);
     fill(map);
     hashmap_remove(map, "baz");
 
     ck_assert_str_eq(hashmap_get(map, "foo"), "bar");
-    ck_assert_ptr_eq(hashmap_get(map, "baz"), NULL);
+    ck_assert(NULL == hashmap_get(map, "baz"));
     free(map);
   }END_TEST
 

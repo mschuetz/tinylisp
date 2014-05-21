@@ -41,7 +41,7 @@ static bool is_sym(){
   return !(is_o() || is_c());
 }
 
-static void match(char * s){
+static void match(const char * s){
   if (strcmp(s, _sym)==0) {
     _sym = (char *)lex();
   }
@@ -102,7 +102,7 @@ extern FILE * yyin;
 
 struct object * parse_string(char *s){
   struct object *o;
-  char * fn = "/tmp/tinylisp-123";
+  const char * fn = "/tmp/tinylisp-123";
   FILE * f = fopen(fn, "w");
   fwrite(s, strlen(s), 1, f);
   fclose(f);

@@ -5,3 +5,4 @@
 /.cproject
 test/test
 test_scanner
+*.o

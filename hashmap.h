@@ -2,6 +2,7 @@
 #define HASHMAP_H_
 
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct _hashmap_entry {
   void * key;
@@ -12,8 +13,8 @@ typedef struct _hashmap_entry {
 typedef uint32_t (*hashmap_hash_fn)(const void * key, const size_t size);
 typedef bool (*hashmap_equals_fn)(const void * key1, const void * key2, const size_t size);
 
-struct _hashmap {
-  struct hashmap_entry *entries;
+typedef struct _hashmap {
+  hashmap_entry *entries;
   double load_factor;
   size_t size;
   size_t load;
@@ -25,8 +26,7 @@ hashmap * hashmap_create(const size_t initial_size, const double load_factor, ha
 hashmap * hashmap_create_string_keys(const size_t initial_size, const double load_factor);
 
 // returns true on success
-bool hashmap_put(struct hashmap * hm, void * key, void * value);
-hashmap_entry * hashmap_get_entry(const hashmap * hm, const void * key);
+bool hashmap_put(hashmap * hm, void * key, void * value);
 void * hashmap_get(const hashmap * hm, const void * key);
 void *  hashmap_remove(const hashmap * hm, const void * key);
 

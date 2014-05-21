@@ -14,8 +14,8 @@ struct symbol_table {
   int size;
 };
 
-struct object * st_insert(char * name);
-struct object * st_lookup(char * name);
+struct object * st_insert(const char * name);
+struct object * st_lookup(const char * name);
 char * st_id_to_name(int id);
 
 #endif

@@ -5,7 +5,7 @@
 
 static struct symbol_table st;
 
-struct object * st_insert(char * name){
+struct object * st_insert(const char * name){
   struct object * o;
   if ((o = st_lookup(name)) != NULL)
     return o;
@@ -24,7 +24,7 @@ struct object * st_insert(char * name){
   return o;
 }
 
-struct object * st_lookup(char * name){
+struct object * st_lookup(const char * name){
   int i;
   for (i=0; i<st.size; i++){
     if (strcmp(name, st.symbols[i].name) == 0)
