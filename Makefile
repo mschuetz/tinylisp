@@ -3,7 +3,7 @@ LIBFL = /opt/local/lib/libfl.a
 CFLAGS+=-D_GNU_SOURCE -I/opt/local/include -Weverything -Wno-padded -Werror -Wno-gnu-zero-variadic-macro-arguments -Wno-gnu-statement-expression #-DDEBUG
 
 flex:
-	flex lisp_scanner.rl
+	$(LEX) lisp_scanner.rl
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
