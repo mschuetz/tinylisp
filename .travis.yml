@@ -1,0 +1,8 @@
+language: c
+compiler: clang
+before_install: sudo apt-get install check
+before_script:
+  - "sudo mkdir /opt/local"
+  - "sudo mkdir /opt/local/lib"
+  - "sudo ln -s /usr/lib/x86_64-linux-gnu/libfl.a /opt/local/lib/libfl.a"
+script: make && make test

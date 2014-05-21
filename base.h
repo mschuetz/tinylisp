@@ -32,7 +32,7 @@ struct object * eq(struct object * o1, struct object * o2);
 struct object * cons(struct object * o1, struct object * o2);
 struct object * print(struct object * o);
 struct object * reader();
-struct object * sym(char * name);
+struct object * sym(const char * name);
 struct object * list(int len, ...);
 
 struct object * null(struct object * o);
