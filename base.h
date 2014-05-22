@@ -40,7 +40,7 @@ object * list(int len, ...);
 
 object * null(object * o);
 object * and(object * x, object * y);
-object * not(object 
+object * not(object * o);
 object * cadr(object * o);
 object * caddr(object * o);
 object * cadar(object * o);
