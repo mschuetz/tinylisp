@@ -61,7 +61,7 @@ static object * list_body(){
 
 static object * parse_list() {
   match("(");
-  struct object * o;
+  object * o;
   o = list_body();
   match(")");
   return o;
