@@ -9,7 +9,8 @@ typedef int atom;
 
 #define nil NULL
 
-struct cons_cell;
+typedef struct cons_cell cons_cell;
+typedef struct object object;
 
 typedef struct {
   bool atom_p;
