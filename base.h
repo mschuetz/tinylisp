@@ -9,6 +9,8 @@ typedef int atom;
 
 #define nil NULL
 
+struct cons_cell;
+
 typedef struct {
   bool atom_p;
   bool function_p;
@@ -24,29 +26,29 @@ typedef struct {
 extern object * globals;
 extern object * globals_end;
 
-object * car(struct object * o);
-object * cdr(struct object * o);
-object * quote(struct object * o);
-object * atom_p(struct object * o);
-object * eq(struct object * o1, struct object * o2);
-object * cons(struct object * o1, struct object * o2);
-object * print(struct object * o);
+object * car(object * o);
+object * cdr(object * o);
+object * quote(object * o);
+object * atom_p(object * o);
+object * eq(object * o1, object * o2);
+object * cons(object * o1, object * o2);
+object * print(object * o);
 object * reader();
 object * sym(const char * name);
 object * list(int len, ...);
 
-object * null(struct object * o);
-object * and(struct object * x, struct object * y);
-object * not(struct object 
-object * cadr(struct object * o);
-object * caddr(struct object * o);
-object * cadar(struct object * o);
-object * caar(struct object * o);
-object * caddar(struct object * o);
-object * append(struct object * x, struct object * y);
-object * pair(struct object * x, struct object * y);
-object * assoc(struct object * x, struct object * y);
-object * eval(struct object * e, struct object * a);
+object * null(object * o);
+object * and(object * x, object * y);
+object * not(object 
+object * cadr(object * o);
+object * caddr(object * o);
+object * cadar(object * o);
+object * caar(object * o);
+object * caddar(object * o);
+object * append(object * x, object * y);
+object * pair(object * x, object * y);
+object * assoc(object * x, object * y);
+object * eval(object * e, object * a);
 
 #ifdef DEBUG
 #define LOG(fmt, ...) fprintf(stderr, "%s: " fmt "\n", __PRETTY_FUNCTION__, ##__VA_ARGS__);
