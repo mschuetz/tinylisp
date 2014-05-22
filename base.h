@@ -17,12 +17,12 @@ struct _object {
   bool function_p;
   cons_cell * data;
   int symbol_index;
-} object;
+};
 
 struct _cons_cell {
   object * car;
   object * cdr;
-} cons_cell;
+};
 
 extern object * globals;
 extern object * globals_end;
