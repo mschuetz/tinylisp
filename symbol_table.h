@@ -2,15 +2,15 @@
 #define __SYMBOL_TABLE_H
 
 #include "base.h"
-struct symbol {
-  struct object object;
+typedef struct {
+  object object;
   char name[128];
-};
+} symbol;
 
 #define SYMBOL_TABLE_SIZE 2048
 
-struct symbol_table {
-  struct symbol symbols[SYMBOL_TABLE_SIZE];
+symbol_table {
+  symbol symbols[SYMBOL_TABLE_SIZE];
   int size;
 };
 
