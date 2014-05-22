@@ -9,10 +9,10 @@ typedef struct {
 
 #define SYMBOL_TABLE_SIZE 2048
 
-symbol_table {
+typedef struct {
   symbol symbols[SYMBOL_TABLE_SIZE];
   int size;
-};
+} symbol_table;
 
 object * st_insert(const char * name);
 object * st_lookup(const char * name);
