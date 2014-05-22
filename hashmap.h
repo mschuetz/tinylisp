@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct _hashmap_entry {
+typedef struct {
   void * key;
   void * value;
   uint32_t hash;
@@ -13,7 +13,7 @@ typedef struct _hashmap_entry {
 typedef uint32_t (*hashmap_hash_fn)(const void * key, const size_t size);
 typedef bool (*hashmap_equals_fn)(const void * key1, const void * key2, const size_t size);
 
-typedef struct _hashmap {
+typedef struct {
   hashmap_entry *entries;
   double load_factor;
   size_t size;

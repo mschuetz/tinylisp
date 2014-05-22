@@ -2,20 +2,20 @@
 #define __SYMBOL_TABLE_H
 
 #include "base.h"
-struct symbol {
-  struct object object;
+typedef struct {
+  object object;
   char name[128];
-};
+} symbol;
 
 #define SYMBOL_TABLE_SIZE 2048
 
-struct symbol_table {
-  struct symbol symbols[SYMBOL_TABLE_SIZE];
+typedef struct {
+  symbol symbols[SYMBOL_TABLE_SIZE];
   int size;
-};
+} symbol_table;
 
-struct object * st_insert(const char * name);
-struct object * st_lookup(const char * name);
+object * st_insert(const char * name);
+object * st_lookup(const char * name);
 char * st_id_to_name(int id);
 
 #endif

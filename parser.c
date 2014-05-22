@@ -51,24 +51,24 @@ static void match(const char * s){
   }
 }
 
-static struct object * atom_or_list();
+static object * atom_or_list();
 
-static struct object * list_body(){
+static object * list_body(){
   if (is_c())
     return nil;
   return cons(atom_or_list(), list_body());
 }
 
-static struct object * parse_list() {
+static object * parse_list() {
   match("(");
-  struct object * o;
+  object * o;
   o = list_body();
   match(")");
   return o;
 }
 
-static struct object * parse_atom() {
-  static struct object * o;
+static object * parse_atom() {
+  static object * o;
   check_not_nil(_sym, "parse error");
   if (strcmp(_sym, "nil")==0)
     o = nil;
@@ -78,7 +78,7 @@ static struct object * parse_atom() {
   return o;
 }
 
-static struct object * atom_or_list(){
+static object * atom_or_list(){
   if (is_sym())
     return parse_atom();
   else if (is_o())
@@ -89,19 +89,19 @@ static struct object * atom_or_list(){
   }
 }
 
-static struct object * lisp_program(){
+static object * lisp_program(){
   return atom_or_list();
 }
 
-static struct object * parse(){
+static object * parse(){
   _sym = (char *)lex();
   return lisp_program();
 }
 
 extern FILE * yyin;
 
-struct object * parse_string(char *s){
-  struct object *o;
+object * parse_string(char *s){
+  object *o;
   const char * fn = "/tmp/tinylisp-123";
   FILE * f = fopen(fn, "w");
   fwrite(s, strlen(s), 1, f);

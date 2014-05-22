@@ -5,7 +5,7 @@
 #include "base.h"
 #include "symbol_table.h"
 
-struct object * car(struct object * o){
+object * car(object * o){
   if (!atom_p(o)) {
     if (o!=nil)
       return o->data->car;
@@ -15,7 +15,7 @@ struct object * car(struct object * o){
   check(false, "argument not a list");
 }
 
-struct object * cdr(struct object * o){
+object * cdr(object * o){
   if (!atom_p(o)) {
     if (o!=nil)
       return o->data->cdr;
@@ -25,31 +25,31 @@ struct object * cdr(struct object * o){
   check(false, "argument not a list");
 }
 
-struct object * atom_p(struct object * o){
+object * atom_p(object * o){
   if (o!=nil && o->atom_p)
     return sym("t");
   else
     return nil;
 }
 
-struct object * eq(struct object * o1, struct object * o2){
+object * eq(object * o1, object * o2){
   if ((atom_p(o1) && atom_p(o2) && o1==o2) || (o1==o2 && o2==nil))
     return sym("t");
   else
     return nil;
 }
 
-struct object * list(int len, ...) {
+object * list(int len, ...) {
   va_list ap;
-  struct object * start = nil;
-  struct object * cur = nil;
-  struct object * o = nil;
+  object * start = nil;
+  object * cur = nil;
+  object * o = nil;
   int i;
   start = cons(nil, nil);
   cur = start;
   va_start(ap, len);
   for (i=0;i<len;i++){
-    o = va_arg(ap, struct object *);
+    o = va_arg(ap, object *);
     cur->data->car = o;
     if (i==len-1)
       cur->data->cdr = nil;
@@ -61,25 +61,25 @@ struct object * list(int len, ...) {
   return start;
 }
 
-struct object * cons(struct object * o1, struct object * o2){
-  struct object * o = (struct object *) malloc(sizeof(struct object));
+object * cons(object * o1, object * o2){
+  object * o = (object *) malloc(sizeof(object));
   o->atom_p = false;
   o->function_p = false;
-  struct cons_cell * cc = (struct cons_cell *) malloc(sizeof(struct cons_cell));
+  cons_cell * cc = (cons_cell *) malloc(sizeof(cons_cell));
   o->data = cc;
   cc->car = o1;
   cc->cdr = o2;
   return o;
 }
 
-struct object * quote(struct object * o){
+object * quote(object * o){
   return o;
 }
 
-static void print_cons(struct object * o);
+static void print_cons(object * o);
 static void print_atom(atom a);
 
-struct object * print(struct object * o){
+object * print(object * o){
   if (o==nil) {
     printf("nil");
     return nil;
@@ -93,7 +93,7 @@ struct object * print(struct object * o){
   return nil;
 }
 
-static void print_cons(struct object * o){
+static void print_cons(object * o){
   /*  printf("(");
   print(car(o));
   printf(" . ");
@@ -113,18 +113,18 @@ static void print_atom(atom a){
   printf("%s", st_id_to_name(a));
 }
 
-struct object * null(struct object * o){
+object * null(object * o){
   return eq(o, nil);
 }
 
-struct object * and(struct object * x, struct object * y){
+object * and(object * x, object * y){
   if (!null(x) && !null(y))
     return sym("t");
   else
     return nil;
 }
 
-struct object * not(struct object * o){
+object * not(object * o){
   if (o == nil)
     return sym("t");
   else
@@ -132,35 +132,35 @@ struct object * not(struct object * o){
 }
 
 
-struct object * sym(const char * name){
+object * sym(const char * name){
   return st_insert(name);
 }
 
-struct object * cadr(struct object * o){
+object * cadr(object * o){
   return car(cdr(o));
 }
 
-struct object * caddr(struct object * o){
+object * caddr(object * o){
   return car(cdr(cdr(o)));
 }
 
-static struct object * cadddr(struct object * o){
+static object * cadddr(object * o){
   return car(cdr(cdr(cdr(o))));
 }
 
-struct object * caar(struct object * o){
+object * caar(object * o){
   return car(car(o));
 }
 
-struct object * caddar(struct object * o){
+object * caddar(object * o){
   return car(cdr(cdr(car(o))));
 }
 
-struct object * cadar(struct object * o){
+object * cadar(object * o){
   return car(cdr(car(o)));
 }
 
-struct object * append(struct object * x, struct object * y){
+object * append(object * x, object * y){
   if (null(x))
     return y;
   
@@ -168,7 +168,7 @@ struct object * append(struct object * x, struct object * y){
 }
 
 
-struct object * pair(struct object * x, struct object * y) {
+object * pair(object * x, object * y) {
   if (null(x) && null(y))
     return nil;
   
@@ -179,7 +179,7 @@ struct object * pair(struct object * x, struct object * y) {
   exit(1);
 }
 
-struct object * assoc(struct object * x, struct object * y) {
+object * assoc(object * x, object * y) {
   if (null(x)) {
     fprintf(stderr, "nil is not a variablename\n");
     exit(EXIT_FAILURE);
@@ -195,13 +195,13 @@ struct object * assoc(struct object * x, struct object * y) {
   return assoc(x, cdr(y));
 }
 
-static struct object * evcon(struct object * c, struct object *a);
-static struct object * evlis(struct object * m, struct object *a);
+static object * evcon(object * c, object *a);
+static object * evlis(object * m, object *a);
 
-struct object * globals = nil;
-struct object * globals_end = nil;
+object * globals = nil;
+object * globals_end = nil;
 
-struct object * eval(struct object * e, struct object *a){
+object * eval(object * e, object *a){
   if (null(e))
     return nil;
   if (atom_p(e))
@@ -238,10 +238,10 @@ struct object * eval(struct object * e, struct object *a){
     }
 
     if (eq(car(e), sym("defun"))) {
-      struct object *name = cadr(e);
-      struct object *params = caddr(e);
-      struct object *body = cadddr(e);
-      struct object *pair = cons(list(2, name, list(3, sym("lambda"), params, body)), nil);
+      object *name = cadr(e);
+      object *params = caddr(e);
+      object *body = cadddr(e);
+      object *pair = cons(list(2, name, list(3, sym("lambda"), params, body)), nil);
       globals_end->data->cdr = pair;
       globals_end = pair;
       return eval(name, a);
@@ -267,14 +267,14 @@ struct object * eval(struct object * e, struct object *a){
   exit(1);
 }
 
-struct object * evcon(struct object * c, struct object *a){
+object * evcon(object * c, object *a){
   if (eval(caar(c), a))
     return eval(cadar(c), a);
   
   return evcon(cdr(c), a);
 }
 
-struct object * evlis(struct object * m, struct object *a){
+object * evlis(object * m, object *a){
   if (null(m))
     return nil;
   

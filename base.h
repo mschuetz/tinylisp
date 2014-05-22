@@ -9,45 +9,47 @@ typedef int atom;
 
 #define nil NULL
 
-struct object {
+typedef struct _cons_cell cons_cell;
+typedef struct _object object;
+
+struct _object {
   bool atom_p;
   bool function_p;
-  struct cons_cell * data;
+  cons_cell * data;
   int symbol_index;
 };
 
-struct cons_cell {
-  struct object * car;
-  struct object * cdr;
+struct _cons_cell {
+  object * car;
+  object * cdr;
 };
 
-extern struct object * globals;
-extern struct object * globals_end;
+extern object * globals;
+extern object * globals_end;
 
-struct object * car(struct object * o);
-struct object * cdr(struct object * o);
-struct object * quote(struct object * o);
-struct object * atom_p(struct object * o);
-struct object * eq(struct object * o1, struct object * o2);
-struct object * cons(struct object * o1, struct object * o2);
-struct object * print(struct object * o);
-struct object * reader();
-struct object * sym(const char * name);
-struct object * list(int len, ...);
+object * car(object * o);
+object * cdr(object * o);
+object * quote(object * o);
+object * atom_p(object * o);
+object * eq(object * o1, object * o2);
+object * cons(object * o1, object * o2);
+object * print(object * o);
+object * reader();
+object * sym(const char * name);
+object * list(int len, ...);
 
-struct object * null(struct object * o);
-struct object * and(struct object * x, struct object * y);
-struct object * not(struct object * o);
-
-struct object * cadr(struct object * o);
-struct object * caddr(struct object * o);
-struct object * cadar(struct object * o);
-struct object * caar(struct object * o);
-struct object * caddar(struct object * o);
-struct object * append(struct object * x, struct object * y);
-struct object * pair(struct object * x, struct object * y);
-struct object * assoc(struct object * x, struct object * y);
-struct object * eval(struct object * e, struct object * a);
+object * null(object * o);
+object * and(object * x, object * y);
+object * not(object * o);
+object * cadr(object * o);
+object * caddr(object * o);
+object * cadar(object * o);
+object * caar(object * o);
+object * caddar(object * o);
+object * append(object * x, object * y);
+object * pair(object * x, object * y);
+object * assoc(object * x, object * y);
+object * eval(object * e, object * a);
 
 #ifdef DEBUG
 #define LOG(fmt, ...) fprintf(stderr, "%s: " fmt "\n", __PRETTY_FUNCTION__, ##__VA_ARGS__);
