@@ -9,17 +9,17 @@ typedef int atom;
 
 #define nil NULL
 
-typedef struct cons_cell cons_cell;
-typedef struct object object;
+typedef struct _cons_cell cons_cell;
+typedef struct _object object;
 
-typedef struct {
+struct _object {
   bool atom_p;
   bool function_p;
   cons_cell * data;
   int symbol_index;
 } object;
 
-typedef struct {
+struct _cons_cell {
   object * car;
   object * cdr;
 } cons_cell;
