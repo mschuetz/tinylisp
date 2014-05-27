@@ -3,6 +3,7 @@
 /tinylisp
 /.project
 /.cproject
-test/test
+test_runner
+lisp_scanner.c
 test_scanner
 *.o

@@ -2,7 +2,7 @@
 #define __PARSER_H
 #include "base.h"
 
-enum symbol_types { SYMBOL, OPENING_BRACE, CLOSING_BRACE };
+enum symbol_types { SYMBOL=1, OPENING_BRACE, CLOSING_BRACE };
 
 object * parse_string(char *s);
 
