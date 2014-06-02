@@ -1,6 +1,8 @@
 language: c
 compiler: clang
-before_install: sudo apt-get install check
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y check
 before_script:
   - "sudo mkdir /opt/local"
   - "sudo mkdir /opt/local/lib"
